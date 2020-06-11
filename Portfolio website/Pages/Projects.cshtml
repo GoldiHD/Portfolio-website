@@ -3,5 +3,18 @@
 @{
     ViewData["Title"] = "Projects";
 }
-<h1>Projects</h1>
+
+<div>
+    @foreach(Portfolio_website.Entities.Project element in @Model.Projects)
+    {
+    <a href="/ProjectPage/@element.id" asp->
+        <div style="border: 2px #2c2f33; border-style: groove; margin-top: 20px;">
+            <h4 style="float: left;">@element.name</h4>
+            <img style="float: right;" src="@element.imagePath" />
+            <br>
+            <p style="margin-top: 5px;">@element.smallDescriptiom</p>
+        </div>
+    </a>
+    }
+</div>
 

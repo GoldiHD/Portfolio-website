@@ -1,0 +1,31 @@
+﻿@page "{id:int}"
+@model Portfolio_website.Pages.ProjectPageModel
+@{
+    ViewData["Title"] = "ProjectPage";
+}
+
+<div class="row" style="margin-top: 2%;">
+    <div class="col-6">
+        <h1>@Model.project.name</h1>
+        <p>@Model.project.description</p>
+    </div>
+    <div class="col-3">
+        <img src="@Model.project.
+             " />
+        <div style="border: 1px; margin-top: 1%">
+            <a href="@Model.project.githubLink">Github</a>
+            <br />
+            <a href="@Model.project.trelloLink">Trello</a>
+        </div>
+        <div style="margin-top: 1%; border: 1px;">
+            @foreach(Portfolio_website.Entities.Links element in Model.project.otherLinks)
+            {
+                <a href = @element.link>@element.name</a>
+            }
+        </div>
+    </div>
+</div>
+
+<p></p>
+
+
