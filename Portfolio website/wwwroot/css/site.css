@@ -26,7 +26,8 @@ a {
 
 .sidenav {
     height: 100%;
-    width: 10%;
+    width: 10vw;
+    max-width: 10%;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -44,14 +45,18 @@ a {
         display: block;
     }
 
-.sidenav a:hover
-{
-    color: #f1f1f1;
-}
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
 
 .navbar-content {
     border: 2px solid #23272a;
 }
+
+
+    
+
+
 
 /* Sticky footer styles
 -------------------------------------------------- */
