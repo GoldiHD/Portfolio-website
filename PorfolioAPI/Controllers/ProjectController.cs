@@ -9,7 +9,7 @@ using PortfolioAPI.Entities;
 
 namespace PortfolioAPI.Controllers
 {
-    [Route("api/project")]
+    [Route("api/project/")]
     [ApiController]
     public class ProjectController : ControllerBase
     {

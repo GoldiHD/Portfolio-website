@@ -30,9 +30,7 @@ namespace Portfolio_website.Entities
             {
                 otherLinks = new List<Links>();
             }
-
         }
-
     }
     public struct Links
     {
