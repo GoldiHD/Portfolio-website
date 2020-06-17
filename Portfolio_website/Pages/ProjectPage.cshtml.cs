@@ -9,12 +9,12 @@ using Portfolio_website.Toobox;
 
 namespace Portfolio_website.Pages
 {
-    public class ProjectsModel : PageModel
+    public class ProjectPageModel : PageModel
     {
-        public List<Project> Projects;
-        public void OnGet()
+        public Project project { get; set; }
+        public void OnGet(int id)
         {
-            Projects = SingleTon.GetAllProjects();
+            project = SingleTon.StaticGetProject(id);
         }
     }
 }

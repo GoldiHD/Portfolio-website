@@ -10,7 +10,7 @@ namespace Portfolio_website.Toobox
     {
         private static List<Project> projectsInstance;
 
-        public static Project GetProject(int id)
+        public static Project StaticGetProject(int id)
         {
             //Dummy data
             //should access api point and draw data from DB
@@ -24,10 +24,10 @@ namespace Portfolio_website.Toobox
             return projectsInstance[id];
         }
 
-        public static List<Project> GetAllProjects()
+        public static List<Project> StaticGetAllProjects()
         {
             //just to Initialse;
-            GetProject(0);
+            StaticGetProject(0);
             return projectsInstance;
         }
 
