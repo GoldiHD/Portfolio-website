@@ -14,9 +14,15 @@ namespace Portfolio_website.Toobox
         ResourceManager resx = new ResourceManager("PortfolioAPI.DB_Data", Assembly.GetExecutingAssembly());
         CosmosClient cosmosClient;
 
-        public SQLConnector()
+        public async Task CreateSQLConnector()
         {
             cosmosClient = new CosmosClient(resx.GetString("EndpointUrl"), resx.GetString("AuthorizationKey"));
+            await CreateDBIfItNotExists();
+        }
+
+        public async Task CreateDBIfItNotExists()
+        {
+            CosmosDatabase db = await cosmosClient.CreateDatabaseIfNotExistsAsync(resx.GetString("DatabaseId"));
         }
 
 
