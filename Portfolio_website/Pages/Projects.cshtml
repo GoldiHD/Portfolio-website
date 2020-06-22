@@ -7,7 +7,7 @@
 <div>
     @foreach(Portfolio_website.Entities.Project element in @Model.Projects)
     {
-    <a href="/ProjectPage/@element.id" asp->
+    <a href="/ProjectPage/@element.Id" asp->
         <div style="border: 2px #2c2f33; border-style: groove; margin-top: 20px;">
             <h4 style="float: left;">@element.name</h4>
             <img style="float: right;" src="@element.imagePath" />

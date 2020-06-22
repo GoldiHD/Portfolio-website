@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -38,6 +39,26 @@ namespace Portfolio_website.Entities
             {
                 otherLinks = new List<Links>();
             }
+        }
+
+        private void ConvertImageToByteArray(System.Drawing. imageToConvert, System.Drawing.Imaging.ImageFormat formatOfImage)
+        {
+            byte[] Ret;
+            try
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    imageToConvert.Save(ms, formatOfImage);
+                    Ret = ms.ToArray();
+                }
+            }
+            catch (Exception) { throw; }
+            return Ret;
+        }
+
+        public void GetPicture(picture)
+        {
+            return Encoding.Convert()';
         }
     }
     public struct Links

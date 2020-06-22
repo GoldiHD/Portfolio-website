@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Azure.Cosmos;
 using System.Resources;
 using System.Reflection;
+using Portfolio_website.Entities;
+using System.Net;
+using System.ComponentModel;
 
 namespace Portfolio_website.Toobox
 {
@@ -17,18 +20,56 @@ namespace Portfolio_website.Toobox
         public async Task CreateSQLConnector()
         {
             cosmosClient = new CosmosClient(resx.GetString("EndpointUrl"), resx.GetString("AuthorizationKey"));
-            await CreateDBIfItNotExists();
+            await GetDB();
+            await GetContainer();
         }
 
-        public async Task CreateDBIfItNotExists()
+        private async Task<CosmosDatabase> GetDB()
         {
-            CosmosDatabase db = await cosmosClient.CreateDatabaseIfNotExistsAsync(resx.GetString("DatabaseId"));
+            return await cosmosClient.CreateDatabaseIfNotExistsAsync(resx.GetString("DatabaseId"));
         }
 
-
-        public List<ProjectsModel> GetProjects()
+        private async Task<CosmosContainer> GetContainer()
         {
-            return new List<ProjectsModel>();
+            return await cosmosClient.GetDatabase(resx.GetString("DatabaseId")).CreateContainerIfNotExistsAsync(resx.GetString("ProjectContainer"),"/ProjectName");
+        }
+
+        public async Task<List<Project>> GetProjects()
+        {
+            var sqlQueryText = "SELECT * FROM C";
+            CosmosContainer CContainer = await GetContainer();
+            QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
+            List<Project> projects = new List<Project>();
+            await foreach (Project project in CContainer.GetItemQueryIterator<Project>(queryDefinition))
+            {
+                projects.Add(project);
+            }
+            return projects;
+        }
+
+        public async Task AddNewItemToContainerAsync(Project project)
+        {
+            CosmosContainer container = await GetContainer();
+            try
+            {
+                ItemResponse<Project> newProjecResponse = await container.ReadItemAsync<Project>(project.Id.ToString(), new PartitionKey(project.name));
+            }
+            catch(CosmosException ex) when (ex.Status == (int)HttpStatusCode.NotFound)
+            {
+                ItemResponse<Project> newProjecResponse = await container.CreateItemAsync<Project>(project, new PartitionKey(project.name));
+            }
+        }
+
+        private async Task QueryItemsAsync(string search)
+        {
+            var sqlQueryText = "SELECT * FROM C WHERE C.name = '"+ search +"'";
+            CosmosContainer CContainer = await GetContainer();
+            QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
+            List<Project> projects = new List<Project>();
+            await foreach(Project project in CContainer.GetItemQueryIterator<Project>(queryDefinition))
+            {
+                projects.Add(project);
+            }
         }
     }
 }

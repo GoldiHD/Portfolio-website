@@ -17,9 +17,9 @@ namespace Portfolio_website.Toobox
             if (projectsInstance == null)
             {
                 projectsInstance = new List<Project>();
-                projectsInstance.Add(new Project("Project1", "this is project 1", "This project is a project that contains things", "path", 0, "goog.com", "google.com"));
-                projectsInstance.Add(new Project("Project2", "this is project 2", "This project is a project that contains even more things", "path", 1, "goog.com", "google.com"));
-                projectsInstance.Add(new Project("Project3", "this is project 3", "This project is a project that contains less then the others", "path", 2, "goog.com", "google.com", new List<Links>() { new Links { name = "Link", link = "www.google.com"  } }));
+                projectsInstance.Add(new Project("Project1", "this is project 1", "This project is a project that contains things", new Byte[0], 0, "goog.com", "google.com"));
+                projectsInstance.Add(new Project("Project2", "this is project 2", "This project is a project that contains even more things", new Byte[0], 1, "goog.com", "google.com"));
+                projectsInstance.Add(new Project("Project3", "this is project 3", "This project is a project that contains less then the others", new Byte[0], 2, "goog.com", "google.com", new List<Links>() { new Links { name = "Link", link = "www.google.com"  } }));
             }
             return projectsInstance[id];
         }
