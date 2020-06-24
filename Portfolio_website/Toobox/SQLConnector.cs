@@ -14,24 +14,23 @@ namespace Portfolio_website.Toobox
 {
     public class SQLConnector 
     {
-        ResourceManager resx = new ResourceManager("PortfolioAPI.DB_Data", Assembly.GetExecutingAssembly());
         CosmosClient cosmosClient;
 
         public async Task CreateSQLConnector()
         {
-            cosmosClient = new CosmosClient(resx.GetString("EndpointUrl"), resx.GetString("AuthorizationKey"));
+            cosmosClient = new CosmosClient(SingleTon.getResources("EndpointUrl"), SingleTon.getResources("AuthorizationKey"));
             await GetDB();
             await GetContainer();
         }
 
         private async Task<CosmosDatabase> GetDB()
         {
-            return await cosmosClient.CreateDatabaseIfNotExistsAsync(resx.GetString("DatabaseId"));
+            return await cosmosClient.CreateDatabaseIfNotExistsAsync(SingleTon.getResources("DatabaseId"));
         }
 
         private async Task<CosmosContainer> GetContainer()
         {
-            return await cosmosClient.GetDatabase(resx.GetString("DatabaseId")).CreateContainerIfNotExistsAsync(resx.GetString("ProjectContainer"),"/ProjectName");
+            return await cosmosClient.GetDatabase(SingleTon.getResources("DatabaseId")).CreateContainerIfNotExistsAsync(SingleTon.getResources("ProjectContainer"),"/ProjectName");
         }
 
         public async Task<List<Project>> GetProjects()

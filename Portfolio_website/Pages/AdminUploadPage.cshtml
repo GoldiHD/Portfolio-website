@@ -1,0 +1,37 @@
+﻿@page
+@model Portfolio_website.Pages.AdminUploadPageModel
+@{
+    ViewData["Title"] = "AdminPage";
+}
+
+<h1>AdminUploadPage</h1>
+<div>
+    <h3>Project name</h3>
+    <input asp-for="Name" />
+
+    <h4>Small description</h4>
+    <textarea style="width 50%" id="SDtext" asp-for="smallDescription"></textarea>
+
+    <h4>Description</h4>
+    <textarea style="width 50%" asp-for="Description"></textarea>
+
+    <h4>Github</h4>
+    <input asp-for="Github" />
+
+    <h4>Trello</h4>
+    <input asp-for="TrelloLink" />
+
+    <h4>Links (seperate by , and space between name and link)</h4>
+    <input asp-for="links" />
+
+    <h4>Select a image to upload</h4>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" asp-for="Upload" />
+        <input type="submit"/>
+    </form>
+
+    <h2>@Model.testTextURI</h2>
+    <img src="@Model.testTextURI" />
+
+    <button onclick="@Model.SaveProject()" >Create Project</button>
+</div>
