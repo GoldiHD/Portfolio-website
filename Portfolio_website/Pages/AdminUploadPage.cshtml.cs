@@ -15,7 +15,8 @@ namespace Portfolio_website.Pages
     public class AdminUploadPageModel : PageModel
     {
         public string testTextURI;
-        private Stream PictureStream;
+        private static Stream pictureStream;
+        private static string pictureName;
 
         [BindProperty]
         public IFormFile Upload { get; set; }
@@ -36,11 +37,12 @@ namespace Portfolio_website.Pages
         {
             if (Upload != null)
             {
-                PictureStream = Upload.OpenReadStream();
+                pictureStream = Upload.OpenReadStream();
+                pictureName = Upload.Name;
                 //testTextURI = await BlobAccess.UploadImage(Upload.OpenReadStream(), Upload.FileName);
             }
         }
-        public async Task SaveProject()
+        public async Task OnPostSaveProject()
         {
             List<Links> linksSperated = new List<Links>();
             if (links == "")
@@ -52,7 +54,14 @@ namespace Portfolio_website.Pages
                     linksSperated.Add(new Links { link = temp[1], name = temp[0] });
                 }
             }
-            await SingleTon.GetSQLConnector().AddNewItemToContainerAsync(new Entities.Project(Name, smallDescription, Description, await BlobAccess.UploadImage(Upload.OpenReadStream(), Upload.FileName), SingleTon.GetSQLConnector().GetProjects().Result.Last().Id + 1, TrelloLink, Github,linksSperated));
+            try
+            {
+                await SingleTon.GetSQLConnector().AddNewItemToContainerAsync(new Entities.Project(Name, smallDescription, Description, await BlobAccess.UploadImage(pictureStream, pictureName), SingleTon.GetSQLConnector().GetProjects().Result.Last().Id + 1, TrelloLink, Github, linksSperated));
+            }
+            catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
+            pictureStream = null;
+            pictureName = "";
         }
     }
 }

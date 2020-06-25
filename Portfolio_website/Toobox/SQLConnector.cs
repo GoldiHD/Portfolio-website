@@ -12,7 +12,7 @@ using System.ComponentModel;
 
 namespace Portfolio_website.Toobox
 {
-    public class SQLConnector 
+    public class SQLConnector
     {
         CosmosClient cosmosClient;
 
@@ -23,14 +23,44 @@ namespace Portfolio_website.Toobox
             await GetContainer();
         }
 
+        public SQLConnector()
+        {
+            CreateSQLConnector();
+        }
+
         private async Task<CosmosDatabase> GetDB()
         {
-            return await cosmosClient.CreateDatabaseIfNotExistsAsync(SingleTon.getResources("DatabaseId"));
+            try
+            {
+                await cosmosClient.CreateDatabaseIfNotExistsAsync(SingleTon.getResources("DatabaseId"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return cosmosClient.GetDatabase(SingleTon.getResources("DatabaseId"));
         }
 
         private async Task<CosmosContainer> GetContainer()
         {
-            return await cosmosClient.GetDatabase(SingleTon.getResources("DatabaseId")).CreateContainerIfNotExistsAsync(SingleTon.getResources("ProjectContainer"),"/ProjectName");
+            try
+            {
+                await cosmosClient.GetDatabase(SingleTon.getResources("DatabaseId")).CreateContainerIfNotExistsAsync(new ContainerProperties() { Id = Guid.NewGuid().ToString(), PartitionKeyPath = "/pk", IndexingPolicy = new IndexingPolicy() { Automatic = true, IndexingMode = IndexingMode.Consistent } });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            CosmosContainer container = null;
+            try
+            {
+                container = cosmosClient.GetContainer(SingleTon.getResources("DatabaseId"), SingleTon.getResources("ContainerId"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            return container;
         }
 
         public async Task<List<Project>> GetProjects()
@@ -53,7 +83,7 @@ namespace Portfolio_website.Toobox
             {
                 ItemResponse<Project> newProjecResponse = await container.ReadItemAsync<Project>(project.Id.ToString(), new PartitionKey(project.name));
             }
-            catch(CosmosException ex) when (ex.Status == (int)HttpStatusCode.NotFound)
+            catch (CosmosException ex) when (ex.Status == (int)HttpStatusCode.NotFound)
             {
                 ItemResponse<Project> newProjecResponse = await container.CreateItemAsync<Project>(project, new PartitionKey(project.name));
             }
@@ -61,11 +91,11 @@ namespace Portfolio_website.Toobox
 
         private async Task QueryItemsAsync(string search)
         {
-            var sqlQueryText = "SELECT * FROM C WHERE C.name = '"+ search +"'";
+            var sqlQueryText = "SELECT * FROM C WHERE C.name = '" + search + "'";
             CosmosContainer CContainer = await GetContainer();
             QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
             List<Project> projects = new List<Project>();
-            await foreach(Project project in CContainer.GetItemQueryIterator<Project>(queryDefinition))
+            await foreach (Project project in CContainer.GetItemQueryIterator<Project>(queryDefinition))
             {
                 projects.Add(project);
             }

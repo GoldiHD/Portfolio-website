@@ -27,11 +27,13 @@
     <h4>Select a image to upload</h4>
     <form method="post" enctype="multipart/form-data">
         <input type="file" asp-for="Upload" />
-        <input type="submit"/>
+        <input type="submit" />
     </form>
 
     <h2>@Model.testTextURI</h2>
     <img src="@Model.testTextURI" />
+    <form asp-page-handler="SaveProject" method="post">
+        <button onclick="">Create Project</button>
+    </form>
 
-    <button onclick="@Model.SaveProject()" >Create Project</button>
 </div>
