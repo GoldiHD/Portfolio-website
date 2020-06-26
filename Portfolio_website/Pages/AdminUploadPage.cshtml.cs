@@ -15,8 +15,6 @@ namespace Portfolio_website.Pages
     public class AdminUploadPageModel : PageModel
     {
         public string testTextURI;
-        private static Stream pictureStream;
-        private static string pictureName;
 
         [BindProperty]
         public IFormFile Upload { get; set; }
@@ -33,35 +31,33 @@ namespace Portfolio_website.Pages
         [BindProperty]
         public string Github { get; set; }
 
-        public async Task OnPostAsync()
+        public async Task OnPostSavePicture()
         {
             if (Upload != null)
             {
-                pictureStream = Upload.OpenReadStream();
-                pictureName = Upload.Name;
+
+                List<Links> linksSperated = new List<Links>();
+                if (Name != null)
+                {
+                    if (links == "")
+                    {
+                        string[] SplitLinks = links.Split(',');
+                        foreach (string element in SplitLinks)
+                        {
+                            string[] temp = element.Split(' ');
+                            linksSperated.Add(new Links { link = temp[1], name = temp[0] });
+                        }
+                    }
+                    try
+                    {
+                        await SingleTon.GetSQLConnector().AddNewItemToContainerAsync(new Entities.Project(Name, smallDescription, Description, await BlobAccess.UploadImage(Upload.OpenReadStream(), Upload.FileName), SingleTon.GetSQLConnector().GetNextID().Result, TrelloLink, Github, linksSperated.ToArray()));
+                    }
+                    catch (Exception ex)
+                    { Console.WriteLine(ex.Message); }
+                }
+
                 //testTextURI = await BlobAccess.UploadImage(Upload.OpenReadStream(), Upload.FileName);
             }
-        }
-        public async Task OnPostSaveProject()
-        {
-            List<Links> linksSperated = new List<Links>();
-            if (links == "")
-            {
-                string[] SplitLinks = links.Split(',');
-                foreach (string element in SplitLinks)
-                {
-                    string[] temp = element.Split(' ');
-                    linksSperated.Add(new Links { link = temp[1], name = temp[0] });
-                }
-            }
-            try
-            {
-                await SingleTon.GetSQLConnector().AddNewItemToContainerAsync(new Entities.Project(Name, smallDescription, Description, await BlobAccess.UploadImage(pictureStream, pictureName), SingleTon.GetSQLConnector().GetProjects().Result.Last().Id + 1, TrelloLink, Github, linksSperated));
-            }
-            catch (Exception ex)
-            { Console.WriteLine(ex.Message); }
-            pictureStream = null;
-            pictureName = "";
         }
     }
 }

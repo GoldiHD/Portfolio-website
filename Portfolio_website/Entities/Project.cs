@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿
+
+using Newtonsoft.Json;
 
 namespace Portfolio_website.Entities
 {
     public class Project
     {
-        [JsonPropertyName("id")]
+        [JsonProperty(PropertyName = "id")]
+        public string PKId { get; set; }
         public int Id { get; set; }
         public string name { get; set; }
         public string smallDescriptiom { get; set; }
@@ -18,26 +15,27 @@ namespace Portfolio_website.Entities
         public string imagePath { get; set; } 
         public string trelloLink { get; set; }
         public string githubLink { get; set; }
-        public List<Links> otherLinks { get; set; }
+        public Links[] otherLinks { get; set; }
 
         public override string ToString()
         {
-            return JsonSerializer.Serialize(this);
+            return JsonConvert.SerializeObject(this);
         }
 
-        public Project(string _name, string _smallDescriptiom, string _description, string _imagePath, int _id, string _trelloLink, string _githubLink, List<Links> _otherLinks = null)
+        public Project(string _name, string _smallDescriptiom, string _description, string _imagePath, int _id, string _trelloLink, string _githubLink, Links[] _otherLinks = null)
         {
             name = _name;
             smallDescriptiom = _smallDescriptiom;
             description = _description;
             imagePath = _imagePath;
             Id = _id;
+            PKId = "Project_" + Id;
             trelloLink = _trelloLink;
             githubLink = _githubLink;
             otherLinks = _otherLinks;
             if(otherLinks == null)
             {
-                otherLinks = new List<Links>();
+                otherLinks = new Links[0];
             }
         }
 

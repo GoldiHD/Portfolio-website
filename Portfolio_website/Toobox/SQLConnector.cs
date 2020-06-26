@@ -45,7 +45,7 @@ namespace Portfolio_website.Toobox
         {
             try
             {
-                await cosmosClient.GetDatabase(SingleTon.getResources("DatabaseId")).CreateContainerIfNotExistsAsync(new ContainerProperties() { Id = Guid.NewGuid().ToString(), PartitionKeyPath = "/pk", IndexingPolicy = new IndexingPolicy() { Automatic = true, IndexingMode = IndexingMode.Consistent } });
+                await cosmosClient.GetDatabase(SingleTon.getResources("DatabaseId")).CreateContainerIfNotExistsAsync(new ContainerProperties() { Id = SingleTon.getResources("ContainerId"), PartitionKeyPath = "/PKId", IndexingPolicy = new IndexingPolicy() { Automatic = true, IndexingMode = IndexingMode.Consistent } });
             }
             catch (Exception ex)
             {
@@ -76,12 +76,31 @@ namespace Portfolio_website.Toobox
             return projects;
         }
 
+        public async Task<int> GetNextID()
+        {
+            var sqlQueryText = "SELECT * FROM C";
+            CosmosContainer CContainer = await GetContainer();
+            QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
+            List<Project> projects = new List<Project>();
+            await foreach (Project project in CContainer.GetItemQueryIterator<Project>(queryDefinition))
+            {
+                projects.Add(project);
+            }
+
+            if(projects.Count == 0)
+            {
+                return 0;
+            }
+
+            return projects.Last().Id + 1;
+        }
+
         public async Task AddNewItemToContainerAsync(Project project)
         {
             CosmosContainer container = await GetContainer();
             try
             {
-                ItemResponse<Project> newProjecResponse = await container.ReadItemAsync<Project>(project.Id.ToString(), new PartitionKey(project.name));
+                ItemResponse<Project> newProjecResponse = await container.ReadItemAsync<Project>(project.PKId, new PartitionKey(project.name));
             }
             catch (CosmosException ex) when (ex.Status == (int)HttpStatusCode.NotFound)
             {

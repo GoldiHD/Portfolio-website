@@ -6,34 +6,32 @@
 
 <h1>AdminUploadPage</h1>
 <div>
-    <h3>Project name</h3>
-    <input asp-for="Name" />
 
-    <h4>Small description</h4>
-    <textarea style="width 50%" id="SDtext" asp-for="smallDescription"></textarea>
+    <form method="post" asp-page-handler="SavePicture" enctype="multipart/form-data">
+        <h3>Project name</h3>
+        <input asp-for="Name" />
 
-    <h4>Description</h4>
-    <textarea style="width 50%" asp-for="Description"></textarea>
+        <h4>Small description</h4>
+        <textarea style="width 50%" id="SDtext" asp-for="smallDescription"></textarea>
 
-    <h4>Github</h4>
-    <input asp-for="Github" />
+        <h4>Description</h4>
+        <textarea style="width 50%" asp-for="Description"></textarea>
 
-    <h4>Trello</h4>
-    <input asp-for="TrelloLink" />
+        <h4>Github</h4>
+        <input asp-for="Github" />
 
-    <h4>Links (seperate by , and space between name and link)</h4>
-    <input asp-for="links" />
+        <h4>Trello</h4>
+        <input asp-for="TrelloLink" />
 
-    <h4>Select a image to upload</h4>
-    <form method="post" enctype="multipart/form-data">
+        <h4>Links (seperate by , and space between name and link)</h4>
+        <input asp-for="links" />
+
+        <h4>Select a image to upload</h4>
         <input type="file" asp-for="Upload" />
         <input type="submit" />
     </form>
 
     <h2>@Model.testTextURI</h2>
     <img src="@Model.testTextURI" />
-    <form asp-page-handler="SaveProject" method="post">
-        <button onclick="">Create Project</button>
-    </form>
 
 </div>
