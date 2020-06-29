@@ -14,7 +14,7 @@ namespace Portfolio_website.Pages
         public List<Project> Projects;
         public void OnGet()
         {
-            Projects = SingleTon.StaticGetAllProjects();
+            Projects = SingleTon.GetSQLConnector().GetProjects().Result;
         }
     }
 }

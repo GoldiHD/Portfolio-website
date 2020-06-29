@@ -50,7 +50,7 @@ namespace Portfolio_website.Pages
                     }
                     try
                     {
-                        await SingleTon.GetSQLConnector().AddNewItemToContainerAsync(new Entities.Project(Name, smallDescription, Description, await BlobAccess.UploadImage(Upload.OpenReadStream(), Upload.FileName), SingleTon.GetSQLConnector().GetNextID().Result, TrelloLink, Github, linksSperated.ToArray()));
+                        await SingleTon.GetSQLConnector().AddNewItemToContainerAsync(new Entities.Project() { Name = this.Name, SmallDescriptiom = this.smallDescription, Description = this.Description, ImagePath = await BlobAccess.UploadImage(Upload.OpenReadStream(), Upload.FileName), TrelloLink = this.TrelloLink, GithubLink = this.Github, OtherLinks = linksSperated.ToArray() });
                     }
                     catch (Exception ex)
                     { Console.WriteLine(ex.Message); }
