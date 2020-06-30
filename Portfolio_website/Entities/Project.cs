@@ -19,28 +19,11 @@ namespace Portfolio_website.Entities
         {
             return JsonSerializer.Serialize(this);
         }
-        /*
-        public Project(string _name, string _smallDescriptiom, string _description, string _imagePath, string _trelloLink, string _githubLink, Links[] _otherLinks = null)
-        {
-            Name = _name;
-            SmallDescriptiom = _smallDescriptiom;
-            Description = _description;
-            ImagePath = _imagePath;
-            Id = System.Guid.NewGuid().ToString();
-            TrelloLink = _trelloLink;
-            GithubLink = _githubLink;
-            OtherLinks = _otherLinks;
-            if (OtherLinks == null)
-            {
-                OtherLinks = new Links[0];
-            }
-        }
-        */
 
     }
-    public struct Links
+    public class Links
     {
-        public string name;
-        public string link;
+        public string name { get; set; }
+        public string link { get; set; }
     }
 }
