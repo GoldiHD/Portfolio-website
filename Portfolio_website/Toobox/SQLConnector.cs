@@ -81,7 +81,8 @@ namespace Portfolio_website.Toobox
             CosmosContainer container = await GetContainer();
             try
             {
-                ItemResponse<Project> newProjecResponse = await container.ReadItemAsync<Project>(project.Id, new PartitionKey(project.Name));
+                ItemResponse<Project> newProjecResponse = await container.CreateItemAsync<Project>(project, new PartitionKey(project.Name));
+                //ItemResponse<Project> newProjecResponse = await container.ReadItemAsync<Project>(project.Id, new PartitionKey(project.Name));
             }
             catch (CosmosException ex) when (ex.Status == (int)HttpStatusCode.NotFound)
             {

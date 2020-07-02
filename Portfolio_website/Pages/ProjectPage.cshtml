@@ -3,29 +3,41 @@
 @{
     ViewData["Title"] = "Project " + Model.project.Name;
 }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
 
 <div class="row" style="margin-top: 2%;">
-    <div class="col-6">
+    <div class="col-8">
         <h1>@Model.project.Name</h1>
         <p>@Model.project.Description</p>
     </div>
     <div class="col-3">
-        <img src="@Model.project.
-             " />
+        <a data-fancybox="gallery" href="@Model.project.ImagePath">
+            <img src="@Model.project.ImagePath" style="height: 20vw; width: 20vw; object-fit: contain; object-position: center;">
+        </a>
         <div style="border: 1px; margin-top: 1%">
-            <a href="@Model.project.GithubLink">Github</a>
+            @if (Model.project.GithubLink != "")
+            {
+                <a href="@Model.project.GithubLink">Github</a>
+            }
             <br />
-            <a href="@Model.project.TrelloLink">Trello</a>
+            @if (Model.project.TrelloLink != "")
+            {
+                <a href="@Model.project.TrelloLink">Trello</a>
+            }
         </div>
         <div style="margin-top: 1%; border: 1px;">
-            @foreach(Portfolio_website.Entities.Links element in Model.project.OtherLinks)
+            @foreach (Portfolio_website.Entities.Links element in Model.project.OtherLinks)
             {
-                <a href = @element.link>@element.name</a>
+                <a href=@element.link>@element.name</a>
             }
         </div>
     </div>
 </div>
 
-<p></p>
+@section scripts {
 
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
 
+}

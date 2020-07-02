@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Portfolio_website.Entities;
 using Portfolio_website.Toobox;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Portfolio_website.Pages
 {
+    [Authorize]
     public class AdminUploadPageModel : PageModel
     {
         public string testTextURI;
@@ -50,7 +52,7 @@ namespace Portfolio_website.Pages
                     }
                     try
                     {
-                        await SingleTon.GetSQLConnector().AddNewItemToContainerAsync(new Entities.Project() { Name = this.Name, SmallDescriptiom = this.smallDescription, Description = this.Description, ImagePath = await BlobAccess.UploadImage(Upload.OpenReadStream(), Upload.FileName), TrelloLink = this.TrelloLink, GithubLink = this.Github, OtherLinks = linksSperated.ToArray() });
+                        await SingleTon.GetSQLConnector().AddNewItemToContainerAsync(new Entities.Project() { Name = this.Name, SmallDescriptiom = this.smallDescription, Description = this.Description, ImagePath = await BlobAccess.UploadImage(Upload.OpenReadStream(), Upload.FileName), TrelloLink = this.TrelloLink, GithubLink = this.Github, OtherLinks = linksSperated.ToArray(), Id = Name + Guid.NewGuid().ToString() });
                     }
                     catch (Exception ex)
                     { Console.WriteLine(ex.Message); }
